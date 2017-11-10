@@ -5,6 +5,7 @@
 
 # testing
 /coverage
+/src/server/files
 
 # production
 /build

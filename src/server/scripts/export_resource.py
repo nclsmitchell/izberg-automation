@@ -161,7 +161,9 @@ class ChannelExporter(BaseExporter):
         path = os.getcwd() + '/src/server/files/' + filename
 
         fieldnames = ['product.gtin', 'product.name', 'product.description', 'product.application_categories_dict.external_id', 'product.brand.name', 'product.default_image', 'product.language', 'product.keywords', 'product.package_weight', 'product.item_width', 'product.item_length', 'product.item_height',
-        'sku', 'price', 'previous_price_without_vat', 'stock', 'condition', 'merchant.id', 'shipping_cost_override_value', 'attributes.global_shipping_delays']
+        'sku', 'price', 'previous_price_without_vat', 'stock', 'condition', 'merchant.id', 'shipping_cost_override_value', 'attributes.global_shipping_delays',
+        'variations'
+        ]
 
         writer = csv.DictWriter(open(path, 'wb'), fieldnames=fieldnames)
         writer.writeheader()

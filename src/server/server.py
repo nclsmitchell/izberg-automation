@@ -82,4 +82,4 @@ class MerchantExporter(Resource):
 api.add_resource(MerchantExporter, '/api/application_merchant/export/')
 
 if __name__ == '__main__':
-    app.run(host='192.168.103.223', port=5000)
+    app.run(host='192.168.103.62', port=5000)

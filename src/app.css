@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  padding-bottom: 40px;
 }
 
 nav {
@@ -48,6 +49,7 @@ nav li {
 
 .script-item {
   display: inline-block;
+  vertical-align: top;
   width: 298px;
   border: 1px solid #efefef;
   margin: 40px 20px 0px;

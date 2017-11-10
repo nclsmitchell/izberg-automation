@@ -2,26 +2,26 @@ import React, { Component } from 'react'
 
 import Button from '../components/Button'
 import Download from '../components/Download'
+import Input from '../components/Input'
 
 class Script extends Component {
 
   constructor(props) {
       super(props)
+      this.renderInputs = this.renderInputs.bind(this)
       this.state = {
-          params: {
-              id: '',
-          },
+          params: {},
           file: {}
       }
   }
 
   exporter(route, id) {
-      fetch('http://192.168.103.223:5000/api/' + route + '/export/?id=' + id)
+      fetch('http://192.168.103.62:5000/api/' + route + '/export/?id=' + id)
       .then((res) => res.text())
       .then((responseText) => {
           this.setState({ file: {
             active: true,
-            file_href: 'http://192.168.103.223:5000/api/download/' + route + '_' + id,
+            file_href: 'http://192.168.103.62:5000/api/download/' + route + '_' + id,
           }})
       })
       .catch((error) => {
@@ -29,20 +29,27 @@ class Script extends Component {
       })
   }
 
-  handleInputChange(input, e) {
-    this.setState({
-      params: {
-          ...this.state.params,
-          [input] : e.target.value
-      },
-      file: {}
-    })
+  renderInputs() {
+      return this.props.fields.map( field => {
+          const param = field.param
+          return <Input key={ field.id } placeholder={ field.placeholder } type={ field.type } onChange={ this.handleChange.bind(this, param) } />
+      })
+  }
+
+  handleChange(input, e) {
+      console.log(input, e)
+      this.setState({
+          params: {
+              ...this.state.params,
+              [input] : e
+          },
+          file: {}
+      })
   }
 
   render() {
 
       const label = this.props.label
-      const placeholder = this.props.placeholder
       const route = this.props.route
 
       const active = this.state.file.active
@@ -52,14 +59,7 @@ class Script extends Component {
           <div className="script-item">
               <h2>{ label }</h2>
               <div className="checkout-form">
-                  <div className="field-line">
-                      <input className="field-input"
-                          placeholder={ placeholder }
-                          type="text"
-                          value={ this.state.params.id }
-                          onChange={ this.handleInputChange.bind(this, 'id') }
-                      />
-                  </div>
+                  { this.renderInputs() }
                   <div className="launch-script">
                       <Button label="Launch script" onClick={ () => this.exporter(route, this.state.params.id) } />
                       <Download active={ active } href={ href } />
