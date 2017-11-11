@@ -15,13 +15,27 @@ class Script extends Component {
       }
   }
 
-  exporter(route, id) {
-      fetch('http://192.168.103.62:5000/api/' + route + '/export/?id=' + id)
+  exporter(route, obj) {
+
+      let params = ''
+
+      for (const key in obj) {
+          if (!params) {
+              params += '?' + key + '=' + obj[key]
+          }
+          else {
+              params += '&' + key + '=' + obj[key]
+          }
+      }
+
+      console.log(params)
+
+      fetch('http://127.0.0.1:5000/api/' + route + '/export/' + params)
       .then((res) => res.text())
       .then((responseText) => {
           this.setState({ file: {
             active: true,
-            file_href: 'http://192.168.103.62:5000/api/download/' + route + '_' + id,
+            file_href: 'http://127.0.0.1:5000/api/download/' + route + '_' + obj.id,
           }})
       })
       .catch((error) => {
@@ -37,7 +51,6 @@ class Script extends Component {
   }
 
   handleChange(input, e) {
-      console.log(input, e)
       this.setState({
           params: {
               ...this.state.params,
@@ -50,6 +63,7 @@ class Script extends Component {
   render() {
 
       const label = this.props.label
+      const description = this.props.description
       const route = this.props.route
 
       const active = this.state.file.active
@@ -58,10 +72,11 @@ class Script extends Component {
       return (
           <div className="script-item">
               <h2>{ label }</h2>
+              <p>{ description }</p>
               <div className="checkout-form">
                   { this.renderInputs() }
                   <div className="launch-script">
-                      <Button label="Launch script" onClick={ () => this.exporter(route, this.state.params.id) } />
+                      <Button label="Launch script" onClick={ () => this.exporter(route, this.state.params) } />
                       <Download active={ active } href={ href } />
                   </div>
               </div>

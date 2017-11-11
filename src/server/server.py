@@ -81,5 +81,29 @@ class MerchantExporter(Resource):
 
 api.add_resource(MerchantExporter, '/api/application_merchant/export/')
 
+
+class HipayMerchantExporter(Resource):
+
+    def get(self):
+        application_id = request.args.get('id', None)
+        hipay_username = request.args.get('hipay_username', None)
+        hipay_password = request.args.get('hipay_password', None)
+        export_resource.HipayMerchantExporter().run(application_id, hipay_username, hipay_password)
+
+        filename = 'hipay_merchant_%s.csv' % application_id
+        path = os.getcwd() + '/src/server/files/' + filename
+
+        with open(path) as fp:
+            csv = fp.read()
+
+        response = make_response(csv)
+        response.headers['Access-Control-Allow-Origin'] = '*'
+
+        return response
+
+api.add_resource(HipayMerchantExporter, '/api/hipay_merchant/export/')
+
+
 if __name__ == '__main__':
-    app.run(host='192.168.103.62', port=5000)
+    #app.run(host='192.168.103.62', port=5003)
+    app.run(port=5000)

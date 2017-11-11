@@ -125,6 +125,7 @@ class ErrorExporter(BaseExporter):
             except Exception as e:
                 print e
 
+
 class ChannelExporter(BaseExporter):
 
     def format_data(self, item, fieldnames):
@@ -261,3 +262,101 @@ class MerchantExporter(BaseExporter):
                 writer.writerow(line)
             except:
                 import pdb; pdb.set_trace()
+
+
+class HipayMerchantExporter(BaseExporter):
+
+    def format_data(self, item, fieldnames):
+        line = {}
+
+        for fieldname in fieldnames:
+            try:
+                line[fieldname_with_item] = self.get_value(item, fieldname).encode('utf-8')
+            except AttributeError:
+                line[fieldname_with_item] = self.get_value(item, fieldname)
+
+        return line
+
+    def run(self, application_id, hipay_username, hipay_password):
+
+        if not application_id:
+            raise Exception("You must at least provide an application ID")
+        if not hipay_username:
+            raise Exception("You must at least provide an Hipay username")
+        if not hipay_password:
+            raise Exception("You must at least provide an Hipay password")
+
+        def get_hipay_merchants(application_id):
+            url = 'https://api.iceberg.technology/v1/hipay_merchant_account/?merchant__application={id}&only=merchant,owner_display_name,user_account_id&limit=0'.format(
+                id=application_id
+            )
+            return self.get(url)['objects']
+
+        def get_active_merchants(application_id):
+            url = 'https://api.iceberg.technology/v1/merchant/?application={id}&status__in=10,20,30&only=id,name&limit=0'.format(
+                id=application_id
+            )
+            return self.get(url)['objects']
+
+        def get_hipay_documents(account_id):
+            url = 'https://merchant.hipaywallet.com/api/identification.json'
+            headers = {'php-auth-subaccount-id': str(account_id), 'Authorization': 'Basic ' + base64.b64encode(hipay_username + ':' + hipay_password)}
+            res = requests.get(url, headers=headers)
+            return res.json()
+
+        filename = 'hipay_merchant_%s.csv' % application_id
+        path = os.getcwd() + '/src/server/files/' + filename
+
+        fieldnames = ['id', 'name', 'user_account_id', 'identification_status', 'document.label', 'document.type', 'document.status_label', 'document.status_code',]
+        writer = csv.DictWriter(open(path, 'wb'), fieldnames=fieldnames)
+        writer.writeheader()
+
+        active_merchants = get_active_merchants(application_id)
+        MERCHANT_DICT = {v.get('merchant').get('id'): v for v in get_hipay_merchants(application_id)}
+
+        count = 0
+
+        for merchant in active_merchants:
+            if merchant.get('id') in MERCHANT_DICT.keys():
+                documents = get_hipay_documents(MERCHANT_DICT.get(merchant.get('id')).get('user_account_id'))
+
+                line = {
+                    'id': merchant.get('id'),
+                    'name': merchant.get('name').encode('utf-8'),
+                    'user_account_id': MERCHANT_DICT.get(merchant.get('id')).get('user_account_id'),
+                    'identification_status': documents.get('identification_status')
+                }
+                try:
+                    writer.writerow(line)
+                except:
+                    import pdb; pdb.set_trace()
+
+                if documents.get('identification_status') == 'Unidentified':
+                    for document in documents.get('documents'):
+                        line = {
+                            'id': merchant.get('id'),
+                            'name': merchant.get('name').encode('utf-8'),
+                            'document.label': document.get('label'),
+                            'document.type': document.get('type'),
+                            'document.status_label': document.get('status_label'),
+                            'document.status_code': document.get('status_code')
+                        }
+                        try:
+                            writer.writerow(line)
+                        except:
+                            import pdb; pdb.set_trace()
+
+            else:
+                line = {
+                    'id': merchant.get('id'),
+                    'name': merchant.get('name').encode('utf-8'),
+                    'identification_status': 'No Hipay account'
+                }
+                try:
+                    writer.writerow(line)
+                except:
+                    import pdb; pdb.set_trace()
+
+            count += 1
+            if count % 10 == 0:
+                print count

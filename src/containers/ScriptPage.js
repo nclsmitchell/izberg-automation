@@ -12,6 +12,7 @@ class ScriptPage extends Component {
                 {
                     id: 1,
                     label: "Error export",
+                    description: "A list of the Mapper errors for a specific transformation log ID",
                     fields: [
                         {
                             id: 1,
@@ -25,6 +26,7 @@ class ScriptPage extends Component {
                 {
                     id: 2,
                     label: "Channel item export",
+                    description: "A list of the items contained in a specific channel",
                     fields: [
                         {
                             id: 1,
@@ -37,7 +39,8 @@ class ScriptPage extends Component {
                 },
                 {
                     id: 3,
-                    label: "Application merchant export",
+                    label: "Merchant export",
+                    description: "A list of all application merchants, including their merchant groups",
                     fields: [
                         {
                             id: 1,
@@ -51,6 +54,7 @@ class ScriptPage extends Component {
                 {
                     id: 4,
                     label: "Hipay merchant export",
+                    description: "A list of all application merchants and the state of their KYCs in Hipay",
                     fields: [
                         {
                             id: 1,
@@ -78,7 +82,7 @@ class ScriptPage extends Component {
     }
 
     renderScripts() {
-        return this.state.scripts.map( script => <Script key={ script.id } label={ script.label } fields={ script.fields } route={ script.route } />)
+        return this.state.scripts.map( script => <Script key={ script.id } label={ script.label } description={ script.description } fields={ script.fields } route={ script.route } />)
     }
 
     render() {

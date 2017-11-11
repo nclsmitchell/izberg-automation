@@ -56,6 +56,16 @@ nav li {
   padding: 0 20px 20px;
 }
 
+.script-item h2 {
+  margin-bottom: 30px;
+}
+
+.script-item p {
+  color: #444;
+  font-size: 14px;
+  line-height: 21px;
+}
+
 .field-line {
   margin: 20px 0;
 }
@@ -64,7 +74,6 @@ nav li {
   height: 30px;
   width: calc(100% - 24px);
   padding: 5px 10px;
-  margin-top: 10px;
 }
 
 .btn {
