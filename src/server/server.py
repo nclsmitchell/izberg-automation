@@ -3,6 +3,7 @@ from flask import Flask, render_template, send_from_directory, make_response, se
 from flask_restful import Resource, Api
 
 from scripts import export_resource
+from scripts import update_resource
 
 app = Flask(__name__, template_folder='../../build', static_folder='../../build/static')
 api = Api(app)
@@ -39,7 +40,7 @@ class ErrorExporter(Resource):
 
         return response
 
-api.add_resource(ErrorExporter, '/api/transformation_log/export/')
+api.add_resource(ErrorExporter, '/api/transformation_log/')
 
 
 class ChannelExporter(Resource):
@@ -59,7 +60,7 @@ class ChannelExporter(Resource):
 
         return response
 
-api.add_resource(ChannelExporter, '/api/channel_item/export/')
+api.add_resource(ChannelExporter, '/api/channel_item/')
 
 
 class MerchantExporter(Resource):
@@ -79,7 +80,7 @@ class MerchantExporter(Resource):
 
         return response
 
-api.add_resource(MerchantExporter, '/api/application_merchant/export/')
+api.add_resource(MerchantExporter, '/api/application_merchant/')
 
 
 class HipayMerchantExporter(Resource):
@@ -101,9 +102,29 @@ class HipayMerchantExporter(Resource):
 
         return response
 
-api.add_resource(HipayMerchantExporter, '/api/hipay_merchant/export/')
+api.add_resource(HipayMerchantExporter, '/api/hipay_merchant/')
+
+
+class ImageMigration(Resource):
+
+    def get(self):
+        channel_id = request.args.get('id', None)
+        update_resource.ImageMigration().run(channel_id)
+
+        filename = 'image_migration_%s.csv' % channel_id
+        path = os.getcwd() + '/src/server/files/' + filename
+
+        with open(path) as fp:
+            csv = fp.read()
+
+        response = make_response(csv)
+        response.headers['Access-Control-Allow-Origin'] = '*'
+
+        return response
+
+api.add_resource(ImageMigration, '/api/image_migration/')
 
 
 if __name__ == '__main__':
     #app.run(host='192.168.103.62', port=5003)
-    app.run(port=5000)
+    app.run(port=5006)

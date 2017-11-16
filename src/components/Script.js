@@ -30,12 +30,12 @@ class Script extends Component {
 
       console.log(params)
 
-      fetch('http://127.0.0.1:5000/api/' + route + '/export/' + params)
+      fetch('http://127.0.0.1:5006/api/' + route + '/' + params)
       .then((res) => res.text())
       .then((responseText) => {
           this.setState({ file: {
             active: true,
-            file_href: 'http://127.0.0.1:5000/api/download/' + route + '_' + obj.id,
+            file_href: 'http://127.0.0.1:5006/api/download/' + route + '_' + obj.id,
           }})
       })
       .catch((error) => {

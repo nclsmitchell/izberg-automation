@@ -8,6 +8,7 @@ import './app.css'
 //import reducers from './reducers/reducers'
 import Header from './components/Header'
 import HomePage from './containers/HomePage'
+import UpdatePage from './containers/UpdatePage'
 
 // let store = createStore(
 //     reducers,
@@ -21,6 +22,7 @@ ReactDOM.render(
                 <Header />
                 <Switch>
                     <Route exact path="/" component={ HomePage } />
+                    <Route path="/update" component={ UpdatePage } />
                 </Switch>
             </div>
         </Router>

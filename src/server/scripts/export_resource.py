@@ -24,6 +24,12 @@ class BaseExporter(object):
     def fromtimestamp(self, timestamp):
         return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H:%M:%S')
 
+    def handle_list(self, attr, item):
+        l = []
+        for i in item:
+            l.append(i.get(attr).encode('utf-8'))
+        return ', '.join(l)
+
     def get_value(self, item, fieldname):
         parent_attr = ''
 
@@ -36,22 +42,19 @@ class BaseExporter(object):
                         item = fromtimestamp(item.get(attr))
                     except Exception as e:
                         print "%s: %s" % (attr, e)
-
-                if parent_attr == 'application_categories_dict':
-                    try:
-                        item = item[len(item)-1].get(attr)
-                    except IndexError:
-                        item = ''
-                    except Exception as e:
-                        import pdb; pdb.set_trace()
                 else:
                     try:
-                        item = item.get(attr)
+                        if type(item) == list:
+                            item = self.handle_list(attr, item)
+                        else:
+                            item = item.get(attr)
                     except AttributeError:
                         try:
                             item = item[0].get(attr)
+                        except IndexError:
+                            item = ''
                         except Exception as e:
-                            print "%s: %s" % (attr, e)
+                            import pdb; pdb.set_trace()
             else:
                 item = ''
 
@@ -68,7 +71,7 @@ class ErrorExporter(BaseExporter):
         for fieldname in fieldnames:
             try:
                 line[fieldname] = self.get_value(item, fieldname).encode('utf-8')
-            except AttributeError:
+            except Exception as e:
                 line[fieldname] = self.get_value(item, fieldname)
 
             if item.get('error_code_verbose') == 'Category not found':
@@ -134,7 +137,7 @@ class ChannelExporter(BaseExporter):
         for fieldname in fieldnames:
             try:
                 line[fieldname] = self.get_value(item, fieldname).encode('utf-8')
-            except AttributeError:
+            except Exception as e:
                 line[fieldname] = self.get_value(item, fieldname)
 
         return line
@@ -201,7 +204,7 @@ class MerchantExporter(BaseExporter):
         for fieldname in fieldnames:
             try:
                 line[fieldname] = self.get_value(item, fieldname).encode('utf-8')
-            except AttributeError:
+            except Exception as e:
                 line[fieldname] = self.get_value(item, fieldname)
 
         merchant_groups = self.get_groups(item.get('id'))
@@ -272,8 +275,8 @@ class HipayMerchantExporter(BaseExporter):
         for fieldname in fieldnames:
             try:
                 line[fieldname_with_item] = self.get_value(item, fieldname).encode('utf-8')
-            except AttributeError:
-                line[fieldname_with_item] = self.get_value(item, fieldname)
+            except Exception as e:
+                line[fieldname] = self.get_value(item, fieldname)
 
         return line
 
