@@ -127,4 +127,4 @@ api.add_resource(ImageMigration, '/api/image_migration/')
 
 if __name__ == '__main__':
     #app.run(host='192.168.103.62', port=5003)
-    app.run(port=5006)
+    app.run(port=5000)

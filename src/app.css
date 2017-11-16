@@ -122,3 +122,16 @@ a {
   background-color: #0080ff;
   color: #fff;
 }
+
+.btn .loader {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 1px;
+}
+
+.btn span {
+  display: inline-block;
+  vertical-align: top;
+  line-height: 15px;
+  margin-left: 10px;
+}

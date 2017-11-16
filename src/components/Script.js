@@ -11,7 +11,8 @@ class Script extends Component {
       this.renderInputs = this.renderInputs.bind(this)
       this.state = {
           params: {},
-          file: {}
+          file: {},
+          loading: false,
       }
   }
 
@@ -30,13 +31,17 @@ class Script extends Component {
 
       console.log(params)
 
-      fetch('http://127.0.0.1:5006/api/' + route + '/' + params)
+      this.setState({ loading: true })
+      fetch('http://127.0.0.1:5000/api/' + route + '/' + params)
       .then((res) => res.text())
       .then((responseText) => {
-          this.setState({ file: {
-            active: true,
-            file_href: 'http://127.0.0.1:5006/api/download/' + route + '_' + obj.id,
-          }})
+          this.setState({
+              file: {
+                active: true,
+                file_href: 'http://127.0.0.1:5000/api/download/' + route + '_' + obj.id,
+              },
+              loading: false,
+          })
       })
       .catch((error) => {
           console.error(error)
@@ -76,7 +81,7 @@ class Script extends Component {
               <div className="checkout-form">
                   { this.renderInputs() }
                   <div className="launch-script">
-                      <Button label="Launch script" onClick={ () => this.exporter(route, this.state.params) } />
+                      <Button label="Launch script" loading={ this.state.loading } onClick={ () => this.exporter(route, this.state.params) } />
                       <Download active={ active } href={ href } />
                   </div>
               </div>
