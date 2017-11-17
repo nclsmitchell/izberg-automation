@@ -1,10 +1,16 @@
-# IZBERG Automation
+## IZBERG Automation
 
 A React/Flask website running several scripts
 
-## How to use?
+### How to use?
 
-### Without build:
+In your terminal, first register your IZBERG token:
+
+```
+export IZBERG_TOKEN="YOUR_SECRET_TOKEN"
+```
+
+#### Without build:
 
 In two separated Terminal, run on one side at the origin of the repo:
 
@@ -20,7 +26,7 @@ python src/server/server.py
 
 Then connect to `localhost:3000` and enjoy the result
 
-### With build:
+#### With build:
 
 First step, create a new production build with:
 
@@ -35,11 +41,3 @@ python src/server/server.py
 ```
 
 Finaly connect to `localhost:5000` and enjoy the result
-
-### Warning
-
-You need to set your IZBERG_TOKEN in order to allow scripts to run:
-
-```
-export IZBERG_TOKEN = "YOUR_BEARER"
-```

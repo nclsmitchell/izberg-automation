@@ -118,7 +118,7 @@ a {
   color: #fff;
 }
 
-.btn:active {
+.btn:active, .btn:focus {
   background-color: #0080ff;
   color: #fff;
 }
