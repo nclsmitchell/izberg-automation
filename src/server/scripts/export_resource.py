@@ -142,7 +142,7 @@ class ChannelExporter(BaseExporter):
 
         return line
 
-    def run(self, channel_id):
+    def run(self, channel_id, merchant_id):
 
         if not channel_id:
             raise Exception("You must at least provide a channel ID")
@@ -159,20 +159,31 @@ class ChannelExporter(BaseExporter):
 
         client = algoliasearch.Client(channel.get('algolia_application_id'), channel.get('algolia_api_key'))
         index = client.init_index(channel.get('algolia_index_name'))
-        iterator = index.browse_all({'hitsPerPage': 1000, 'facetFilters': ['status:active'] })
+        iterator = index.browse_all({'hitsPerPage': 1000, 'facetFilters': ['status:active', 'merchant.id: %s' % merchant_id] })
 
-        filename = 'channel_item_%s.csv' % channel_id
+        if len(merchant_id) != 0:
+            filename = 'merchant_%s_items.csv' % merchant_id
+        else:
+            filename = 'channel_item_%s.csv' % channel_id
+
         path = os.getcwd() + '/src/server/files/' + filename
 
-        fieldnames = ['product.gtin', 'product.name', 'product.description', 'product.application_categories_dict.external_id', 'product.brand.name', 'product.default_image', 'product.language', 'product.keywords', 'product.package_weight', 'product.item_width', 'product.item_length', 'product.item_height',
-        'sku', 'price', 'previous_price_without_vat', 'stock', 'condition', 'merchant.id', 'shipping_cost_override_value', 'attributes.global_shipping_delays',
-        'variations'
+        fieldnames = ['product.gtin', 'product.external_id', 'product.name', 'product.description', 'product.application_categories_dict.external_id', 'product.brand.name', 'product.keywords', 'product.language', 'product.details', 'product.package_weight', 'product.item_width', 'product.item_length', 'product.item_height',
+        'sku', 'name', 'description', 'price', 'previous_price', 'price_with_vat', 'previous_price_with_vat','stock', 'condition', 'merchant.id', 'images.url', 'shipping_cost_override_value', 'weight_numeral', 'merchant_url', 'status',
+        'variations', 'variations.sku', 'variations.parent_sku', 'variations.name', 'variations.price', 'variations.previous_price', 'variations.price_with_vat', 'variations.previous_price_with_vat', 'variations.stock', 'variations.images.url', 'variations.variation_type', 'variations.varying_attributes.color', 'variations.varying_attributes.size', 'variations.varying_attributes.material', 'variations.varying_attributes.capacity', 'variations.varying_attributes.other','variations.price_with_vat', 'variations.price_without_vat', 'variations.weight_numeral',
         ]
 
         writer = csv.DictWriter(open(path, 'wb'), fieldnames=fieldnames)
         writer.writeheader()
 
         count = 0
+
+        if 'variations' in fieldnames:
+            f = fieldnames
+            fieldnames = f[:f.index('variations')]
+            variation_fieldnames = f[f.index('variations') + 1:]
+            for i, field in enumerate(variation_fieldnames):
+                variation_fieldnames[i] = '.'.join(field.split('.')[1:])
 
         for item in iterator:
             line = self.format_data(item, fieldnames)
@@ -188,6 +199,36 @@ class ChannelExporter(BaseExporter):
                 writer.writerow(line)
             except:
                 import pdb; pdb.set_trace()
+
+            try:
+                variations = item['variations']
+            except:
+                variations = []
+
+            for variation in variations:
+                line = self.format_data(variation, variation_fieldnames)
+                line['parent_sku'] = item.get('sku').encode('utf-8')
+
+                for key in line.keys():
+                    line['variations.' + key] = line[key]
+                    del line[key]
+
+                line['merchant.id'] = item.get('merchant').get('id')
+                line['product.name'] = item.get('product').get('name').encode('utf-8')
+                try:
+                    line['product.description'] = item.get('product').get('description').encode('utf-8')
+                except:
+                    line['product.description'] = ''
+                try:
+                    line['description'] = item.get('description').encode('utf-8')
+                except:
+                    line['description'] = ''
+                line['product.brand.name'] = item.get('product').get('brand').get('name').encode('utf-8')
+
+                try:
+                    writer.writerow(line)
+                except Exception as e:
+                    import pdb; pdb.set_trace()
 
 
 class MerchantExporter(BaseExporter):

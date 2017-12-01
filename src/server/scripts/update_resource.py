@@ -88,14 +88,29 @@ class ImageMigration(BaseUpdater):
             url = 'https://api.iceberg.technology/v1/productoffer/{id}/assign_image/'.format(
                 id=offer_id
             )
-            payload = {'order': order, 'image_id': image_id }
+            payload = {'order': order, 'image_id': image_id}
             return self.post(url, payload)
 
-        def get_image(image_url):
-            url = 'https://api.iceberg.technology/v1/image/?url={url}'.format(
-                url=image_url
+        def retrieve_image(image_url, merchant_id):
+            url = 'https://api.iceberg.technology/v1/image/?merchant={id}&limit=0'.format(
+                id=merchant_id
             )
-            return self.get(url)
+            page = self.get(url)
+
+            for image in page.get('objects'):
+                if image_url == image.get('url'):
+                    return image.get('id')
+                else:
+                    continue
+
+            while page.get('meta').get('next') is not None:
+                url = page.get('meta').get('next')
+                page = self.get(url)
+                for image in page.get('objects'):
+                    if image_url == image.get('url'):
+                        return image.get('id')
+                    else:
+                        continue
 
         channel = get_channel(channel_id)
 
@@ -114,25 +129,42 @@ class ImageMigration(BaseUpdater):
 
         for offer in iterator:
 
+            offer_id = offer.get('id')
+            merchant_id = offer.get('merchant').get('id')
+
             if offer.get('assigned_images') is None:
                 continue
             if len(offer.get('assigned_images')) == 0 and len(offer.get('images')) > 0:
                 for i, image in enumerate(offer.get('images')):
+                    image_url = image.get('url')
                     try:
-                        created_image = create_image(image.get('url'), offer.get('merchant').get('resource_uri'))
-                        assign_image(offer.get('id'), i, created_image.get('id'))
+                        created_image = create_image(image_url, merchant_id)
+                        assign_image(offer_id, i, created_image.get('id'))
                     except HTTPError as e:
-                        line = [
-                            offer.get('id'),
-                            image.get('url'),
-                            e.response.json().get('errors')[0].get('msg')[0].encode('utf-8')
-                        ]
-                        writer.writerow(line)
+                        if e.response.json().get('errors')[0].get('field') == 'url':
+                            print 'retrieving merchant %s images...' % merchant_id
+                            image_id = retrieve_image(image_url, merchant_id)
+                            try:
+                                assign_image(offer_id, i, image_id)
+                            except HTTPError as e:
+                                line = [
+                                    offer_id,
+                                    image_url,
+                                    e.response.json().get('errors')[0].get('msg')[0].encode('utf-8')
+                                ]
+                                writer.writerow(line)
+                        else:
+                            line = [
+                                offer_id,
+                                image_url,
+                                e.response.json().get('errors')[0].get('msg')[0].encode('utf-8')
+                            ]
+                            writer.writerow(line)
                     except Exception as e:
                         print e
                         line = [
-                            offer.get('id'),
-                            image.get('url'),
+                            offer_id,
+                            image_url,
                             'Unknown error'
                         ]
                         writer.writerow(line)

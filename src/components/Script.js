@@ -29,16 +29,22 @@ class Script extends Component {
           }
       }
 
-      console.log(params)
-
       this.setState({ loading: true })
-      fetch('http://127.0.0.1:5000/api/' + route + '/' + params)
+      fetch('http://192.168.103.99:5000/api/' + route + '/' + params)
       .then((res) => res.text())
       .then((responseText) => {
+
+          if (route === 'channel_item' && obj.merchant_id !== '') {
+              route = 'merchant_' + obj.merchant_id + '_items'
+          }
+          else {
+              route = route + '_' + obj.id
+          }
+
           this.setState({
               file: {
                 active: true,
-                file_href: 'http://127.0.0.1:5000/api/download/' + route + '_' + obj.id,
+                file_href: 'http://192.168.103.99:5000/api/download/' + route,
               },
               loading: false,
           })

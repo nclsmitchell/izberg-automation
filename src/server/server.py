@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 
 from scripts import export_resource
 from scripts import update_resource
+from scripts import compare_settings
 
 app = Flask(__name__, template_folder='../../build', static_folder='../../build/static')
 api = Api(app)
@@ -47,9 +48,14 @@ class ChannelExporter(Resource):
 
     def get(self):
         channel_id = request.args.get('id', None)
-        export_resource.ChannelExporter().run(channel_id)
+        merchant_id = request.args.get('merchant_id', None)
+        export_resource.ChannelExporter().run(channel_id, merchant_id)
 
-        filename = 'channel_item_%s.csv' % channel_id
+        if len(merchant_id) != 0:
+            filename = 'merchant_%s_items.csv' % merchant_id
+        else:
+            filename = 'channel_item_%s.csv' % channel_id
+
         path = os.getcwd() + '/src/server/files/' + filename
 
         with open(path) as fp:
@@ -125,6 +131,20 @@ class ImageMigration(Resource):
 api.add_resource(ImageMigration, '/api/image_migration/')
 
 
+class SettingComparison(Resource):
+
+    def get(self):
+        prod_id = request.args.get('prod_id', None)
+        sand_id = request.args.get('sand_id', None)
+
+        response = make_response(compare_settings.SettingExporter().run(prod_id, sand_id))
+        response.headers['Access-Control-Allow-Origin'] = '*'
+
+        return response
+
+api.add_resource(SettingComparison, '/api/setting_comparison/')
+
+
 if __name__ == '__main__':
-    #app.run(host='192.168.103.62', port=5003)
-    app.run(port=5000)
+    app.run(host='192.168.103.99', port=5000)
+    #app.run(port=5000)

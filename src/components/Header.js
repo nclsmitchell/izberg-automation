@@ -13,6 +13,7 @@ class Header extends Component {
                     <ul>
                         <li><Link to="/">Exports</Link></li>
                         <li><Link to="/update">Update</Link></li>
+                        <li><Link to="/compare">Compare</Link></li>
                     </ul>
                 </nav>
             </div>

@@ -9,6 +9,7 @@ import './app.css'
 import Header from './components/Header'
 import HomePage from './containers/HomePage'
 import UpdatePage from './containers/UpdatePage'
+import ComparisonPage from './containers/ComparisonPage'
 
 // let store = createStore(
 //     reducers,
@@ -23,6 +24,7 @@ ReactDOM.render(
                 <Switch>
                     <Route exact path="/" component={ HomePage } />
                     <Route path="/update" component={ UpdatePage } />
+                    <Route path="/compare" component={ ComparisonPage } />
                 </Switch>
             </div>
         </Router>
