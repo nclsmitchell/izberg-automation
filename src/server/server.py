@@ -146,5 +146,5 @@ api.add_resource(SettingComparison, '/api/setting_comparison/')
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.103.99', port=5000)
+    app.run(host='192.168.103.206', port=5000)
     #app.run(port=5000)

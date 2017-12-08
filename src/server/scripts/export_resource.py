@@ -24,10 +24,13 @@ class BaseExporter(object):
     def fromtimestamp(self, timestamp):
         return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H:%M:%S')
 
-    def handle_list(self, attr, item):
+    def handle_list(self, item, attr=None):
         l = []
         for i in item:
-            l.append(i.get(attr).encode('utf-8'))
+            if attr is not None:
+                l.append(i.get(attr).encode('utf-8'))
+            else:
+                l.append(i.encode('utf-8'))
         return ', '.join(l)
 
     def get_value(self, item, fieldname):
@@ -42,23 +45,35 @@ class BaseExporter(object):
                         item = fromtimestamp(item.get(attr))
                     except Exception as e:
                         print "%s: %s" % (attr, e)
+                elif attr == 'keywords':
+                    try:
+                        item = self.handle_list(item.get(attr))
+                    except TypeError:
+                        item = item.get(attr)
+                elif attr == 'url':
+                    try:
+                        item = self.handle_list(item, attr)
+                    except TypeError:
+                        item = item.get(attr)
                 else:
                     try:
                         if type(item) == list:
-                            item = self.handle_list(attr, item)
+                            item = self.handle_list(item)
                         else:
                             item = item.get(attr)
                     except AttributeError:
                         try:
                             item = item[0].get(attr)
                         except IndexError:
-                            item = ''
+                            return item
                         except Exception as e:
                             import pdb; pdb.set_trace()
+
             else:
                 item = ''
 
             parent_attr = attr
+
 
         return item
 
