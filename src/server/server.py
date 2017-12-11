@@ -21,8 +21,8 @@ def send_static(path):
 def download_file(path):
     try:
         return send_file(os.getcwd() + '/src/server/files/%s.csv' % path, attachment_filename='%s.csv' % path)
-    except Exception as e:
-		print e
+    except:
+		continue
 
 class ErrorExporter(Resource):
 
