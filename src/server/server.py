@@ -22,7 +22,7 @@ def download_file(path):
     try:
         return send_file(os.getcwd() + '/src/server/files/%s.csv' % path, attachment_filename='%s.csv' % path)
     except Exception as e:
-        print e
+        print (e)
 
 class ErrorExporter(Resource):
 
@@ -146,4 +146,4 @@ api.add_resource(SettingComparison, '/api/setting_comparison/')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='192.168.103.81', port=5000)
