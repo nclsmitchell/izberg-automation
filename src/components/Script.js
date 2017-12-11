@@ -30,7 +30,7 @@ class Script extends Component {
       }
 
       this.setState({ loading: true })
-      fetch('http://127.0.0.1:5000/api/' + route + '/' + params)
+      fetch('http://0.0.0.0:5000/api/' + route + '/' + params)
       .then((res) => res.text())
       .then((responseText) => {
 
@@ -44,7 +44,7 @@ class Script extends Component {
           this.setState({
               file: {
                 active: true,
-                file_href: 'http://127.0.0.1:5000/api/download/' + route,
+                file_href: 'http://0.0.0.0:5000/api/download/' + route,
               },
               loading: false,
           })
