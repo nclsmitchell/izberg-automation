@@ -28,7 +28,10 @@ class BaseExporter(object):
         l = []
         for i in item:
             if attr is not None:
-                l.append(i.get(attr).encode('utf-8'))
+                try:
+                    l.append(i.get(attr).encode('utf-8'))
+                except Exception as e:
+                    import pdb; pdb.set_trace()
             else:
                 l.append(i.encode('utf-8'))
         return ', '.join(l)
@@ -44,13 +47,13 @@ class BaseExporter(object):
                     try:
                         item = fromtimestamp(item.get(attr))
                     except Exception as e:
-                        print "%s: %s" % (attr, e)
+                        print("%s: %s" % (attr, e))
                 elif attr == 'keywords':
                     try:
                         item = self.handle_list(item.get(attr))
                     except TypeError:
                         item = item.get(attr)
-                elif attr == 'url':
+                elif attr == 'url' and parent_attr == 'images':
                     try:
                         item = self.handle_list(item, attr)
                     except TypeError:
@@ -103,7 +106,7 @@ class ErrorExporter(BaseExporter):
         if not transformation_log_id:
             raise Exception("You must at least provide a transformation_log ID")
 
-        print "Exporting errors for Transformation log ID %s" % transformation_log_id
+        print("Exporting errors for Transformation log ID %s" % transformation_log_id)
 
         def get_errors(transformation_log_id):
             url = 'https://api.iceberg.technology/v1/mapper_transformation_log_detail/?transformation_log={id}&limit=100'.format(
@@ -125,7 +128,7 @@ class ErrorExporter(BaseExporter):
 
         fieldnames = ['id', 'kind', 'item_identifier_value', 'error_code_verbose', 'error_detail']
 
-        writer = csv.DictWriter(open(path, 'wb'), fieldnames=fieldnames)
+        writer = csv.DictWriter(open(path, 'w'), fieldnames=fieldnames, encoding='utf8')
         writer.writeheader()
 
         errors = get_errors(transformation_log_id)
@@ -136,12 +139,12 @@ class ErrorExporter(BaseExporter):
 
             count += 1
             if count % 100 == 0:
-                print "%s" % (count)
+                print("%s" % count)
 
             try:
                 writer.writerow(line)
             except Exception as e:
-                print e
+                print(e)
 
 
 class ChannelExporter(BaseExporter):
@@ -162,7 +165,7 @@ class ChannelExporter(BaseExporter):
         if not channel_id:
             raise Exception("You must at least provide a channel ID")
 
-        print "Exporting items for Channel ID %s" % channel_id
+        print("Exporting items for Channel ID %s" % channel_id)
 
         def get_channel(channel_id):
             url = 'https://api.iceberg.technology/v1/product_channel/{id}/'.format(
@@ -176,7 +179,7 @@ class ChannelExporter(BaseExporter):
         index = client.init_index(channel.get('algolia_index_name'))
         iterator = index.browse_all({'hitsPerPage': 1000, 'facetFilters': ['status:active', 'merchant.id: %s' % merchant_id] })
 
-        if len(merchant_id) != 0:
+        if merchant_id is not None:
             filename = 'merchant_%s_items.csv' % merchant_id
         else:
             filename = 'channel_item_%s.csv' % channel_id
@@ -188,7 +191,7 @@ class ChannelExporter(BaseExporter):
         'variations', 'variations.sku', 'variations.parent_sku', 'variations.name', 'variations.price', 'variations.previous_price', 'variations.price_with_vat', 'variations.previous_price_with_vat', 'variations.stock', 'variations.images.url', 'variations.variation_type', 'variations.varying_attributes.color', 'variations.varying_attributes.size', 'variations.varying_attributes.material', 'variations.varying_attributes.capacity', 'variations.varying_attributes.other','variations.price_with_vat', 'variations.price_without_vat', 'variations.weight_numeral',
         ]
 
-        writer = csv.DictWriter(open(path, 'wb'), fieldnames=fieldnames)
+        writer = csv.DictWriter(open(path, 'w'), fieldnames=fieldnames, encoding='utf8')
         writer.writeheader()
 
         count = 0
@@ -205,7 +208,7 @@ class ChannelExporter(BaseExporter):
 
             count += 1
             if count % 1000 == 0:
-                print count
+                print(count)
 
             if count % 100000 == 0:
                 break
@@ -283,7 +286,7 @@ class MerchantExporter(BaseExporter):
         if not application_id:
             raise Exception("You must at least provide an application ID")
 
-        print "Exporting merchants for Application ID %s" % application_id
+        print("Exporting merchants for Application ID %s" % application_id)
 
         def get_merchants(application_id):
             url = 'https://api.iceberg.technology/v1/merchant/?application={id}&status__in=10,20,30&limit=100'.format(
@@ -304,7 +307,7 @@ class MerchantExporter(BaseExporter):
 
         fieldnames = ['name', 'external_id', 'addresses.contact_email', 'addresses.contact_first_name', 'addresses.contact_last_name', 'addresses.phone', 'addresses.zipcode', 'addresses.city', 'addresses.address', 'addresses.address2', 'addresses.country.name', 'prefered_language', 'default_currency', 'description', 'long_description', 'url', 'international_group_keys', 'generic_group_keys']
 
-        writer = csv.DictWriter(open(path, 'wb'), fieldnames=fieldnames)
+        writer = csv.DictWriter(open(path, 'w'), fieldnames=fieldnames, encoding='utf8')
         writer.writeheader()
 
         merchants = get_merchants(application_id)
@@ -315,7 +318,7 @@ class MerchantExporter(BaseExporter):
 
             count += 1
             if count % 10 == 0:
-                print count
+                print(count)
 
             try:
                 writer.writerow(line)
@@ -367,7 +370,7 @@ class HipayMerchantExporter(BaseExporter):
         path = os.getcwd() + '/src/server/files/' + filename
 
         fieldnames = ['id', 'name', 'user_account_id', 'identification_status', 'document.label', 'document.type', 'document.status_label', 'document.status_code',]
-        writer = csv.DictWriter(open(path, 'wb'), fieldnames=fieldnames)
+        writer = csv.DictWriter(open(path, 'w'), fieldnames=fieldnames, encoding='utf8')
         writer.writeheader()
 
         active_merchants = get_active_merchants(application_id)
@@ -418,4 +421,4 @@ class HipayMerchantExporter(BaseExporter):
 
             count += 1
             if count % 10 == 0:
-                print count
+                print(count)

@@ -56,7 +56,7 @@ class SettingExporter(BaseComparator):
 
         dif = {}
 
-        for k, v in prod_data.iteritems():
+        for k, v in prod_data.items():
 
             dif[k] = {
                 'production': '',

@@ -22,7 +22,7 @@ def download_file(path):
     try:
         return send_file(os.getcwd() + '/src/server/files/%s.csv' % path, attachment_filename='%s.csv' % path)
     except Exception as e:
-        print e
+        print(e)
 
 class ErrorExporter(Resource):
 
@@ -51,7 +51,7 @@ class ChannelExporter(Resource):
         merchant_id = request.args.get('merchant_id', None)
         export_resource.ChannelExporter().run(channel_id, merchant_id)
 
-        if len(merchant_id) != 0:
+        if merchant_id is not None:
             filename = 'merchant_%s_items.csv' % merchant_id
         else:
             filename = 'channel_item_%s.csv' % channel_id

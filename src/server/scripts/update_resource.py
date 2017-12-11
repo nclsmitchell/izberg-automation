@@ -48,12 +48,12 @@ class BaseUpdater(object):
                     key = fieldname.split('.')[1]
                     line['payload'][key] = item.get(fieldname)
                 except Exception as e:
-                    print "%s: %s" % (fieldname, e)
+                    print("%s: %s" % (fieldname, e))
             elif 'id' in fieldname.split('.'):
                 try:
                     line['id'] = item.get(fieldname)
                 except Exception as e:
-                    print "%s: %s" % (fieldname, e)
+                    print("%s: %s" % (fieldname, e))
             else:
                 continue
         return line
@@ -117,7 +117,7 @@ class ImageMigration(BaseUpdater):
         filename = 'image_migration_%s.csv' % channel_id
         path = os.getcwd() + '/src/server/files/' + filename
 
-        writer = csv.writer(open(path, 'wb'), delimiter=',',
+        writer = csv.writer(open(path, 'w'), delimiter=',',
             quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(['offer_id', 'image_url', 'error_msg'])
 
@@ -141,27 +141,29 @@ class ImageMigration(BaseUpdater):
                         created_image = create_image(image_url, merchant_id)
                         assign_image(offer_id, i, created_image.get('id'))
                     except HTTPError as e:
-                        if e.response.json().get('errors')[0].get('field') == 'url':
-                            print 'retrieving merchant %s images...' % merchant_id
-                            image_id = retrieve_image(image_url, merchant_id)
-                            try:
-                                assign_image(offer_id, i, image_id)
-                            except HTTPError as e:
-                                line = [
-                                    offer_id,
-                                    image_url,
-                                    e.response.json().get('errors')[0].get('msg')[0].encode('utf-8')
-                                ]
-                                writer.writerow(line)
+                        error = e.response.json().get('errors')[0]
+                        if type(error) == type(dict()):
+                            if error.get('field') == 'url':
+                                print('retrieving merchant %s images...' % merchant_id)
+                                image_id = retrieve_image(image_url, merchant_id)
+                                try:
+                                    assign_image(offer_id, i, image_id)
+                                except HTTPError as e:
+                                    line = [
+                                        offer_id,
+                                        image_url,
+                                        error.get('msg')[0].encode('utf-8')
+                                    ]
+                                    writer.writerow(line)
                         else:
                             line = [
                                 offer_id,
                                 image_url,
-                                e.response.json().get('errors')[0].get('msg')[0].encode('utf-8')
+                                error
                             ]
                             writer.writerow(line)
                     except Exception as e:
-                        print e
+                        print(e)
                         line = [
                             offer_id,
                             image_url,
@@ -171,4 +173,4 @@ class ImageMigration(BaseUpdater):
 
                 count += 1
                 if count % 10 == 0:
-                    print count
+                    print(count)

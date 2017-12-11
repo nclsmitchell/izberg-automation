@@ -1,0 +1,11 @@
+id,kind,item_identifier_value,error_code_verbose,error_detail
+399755902,b'error',b'181',b'Identifier Mismatch',
+399755901,b'error',b'180',b'Identifier Mismatch',
+399755900,b'error',b'178',b'Product not found',664ROSANID
+399755899,b'error',b'177',b'Product not found',664BLANID
+399755898,b'error',b'176',b'Product not found',664ORONID
+399755897,b'error',b'175',b'Product not found',664GRISID
+399755896,b'error',b'183',b'Identifier Mismatch',
+399755895,b'error',b'179',b'Product not found',616ROSANID
+399755894,b'error',b'194',b'Unavailable language',
+399755893,b'error',b'182',b'Identifier Mismatch',
