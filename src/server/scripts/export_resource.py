@@ -1,10 +1,8 @@
 # coding: utf-8
 import requests
 from requests import HTTPError
-import wget
 
 from algoliasearch import algoliasearch
-from slugify import slugify
 
 import csv
 import os
