@@ -22,9 +22,9 @@ ReactDOM.render(
             <div>
                 <Header />
                 <Switch>
-                    <Route exact path="/" component={ HomePage } />
-                    <Route path="/update" component={ UpdatePage } />
-                    <Route path="/compare" component={ ComparisonPage } />
+                    <Route path="/" component={ HomePage } />
+                    <Route exact path="/update" component={ UpdatePage } />
+                    <Route exact path="/compare" component={ ComparisonPage } />
                 </Switch>
             </div>
         </Router>
