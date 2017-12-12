@@ -1,5 +1,0 @@
-Flask==0.12
-flask-restful
-requests
-algoliasearch
-datadiff
