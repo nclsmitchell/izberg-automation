@@ -44,7 +44,7 @@ class ComparisonPage extends Component {
         }
 
         this.setState({ loading: true })
-        fetch('http://192.168.103.81:5000/api/setting_comparison/' + params)
+        fetch('https://izberg-automation-api.herokuapp.com/api/setting_comparison/' + params)
         .then((res) => res.json())
         .then((responseJson) => {
             this.setState({

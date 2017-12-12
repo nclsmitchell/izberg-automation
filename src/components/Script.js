@@ -30,7 +30,7 @@ class Script extends Component {
       }
 
       this.setState({ loading: true })
-      fetch('http://192.168.103.81:5000/api/' + route + '/' + params)
+      fetch('https://izberg-automation-api.herokuapp.com/api/' + route + '/' + params)
       .then((res) => res.text())
       .then((responseText) => {
 
@@ -44,7 +44,7 @@ class Script extends Component {
           this.setState({
               file: {
                 active: true,
-                file_href: 'http://192.168.103.81:5000/api/download/' + route,
+                file_href: 'https://izberg-automation-api.herokuapp.com/api/download/' + route,
               },
               loading: false,
           })

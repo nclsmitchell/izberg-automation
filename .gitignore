@@ -5,10 +5,6 @@
 
 # testing
 /coverage
-/src/server/files
-
-# production
-/build
 
 # misc
 .DS_Store
