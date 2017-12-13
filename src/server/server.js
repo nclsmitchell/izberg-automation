@@ -7,7 +7,7 @@ const ipfilter = require('express-ipfilter').IpFilter;
 
 const app = express();
 
-const AUTH_IP = ['::ffff:127.0.0.1', '::ffff:10.16.218.89'];
+const AUTH_IP = ['::ffff:127.0.0.1'];
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -29,7 +29,14 @@ app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 // ipfilter(AUTH_IP, {mode: 'allow'}),
 
 app.get('/test', function(req, res) {
-    res.send(req.connection.remoteAddress);
+    const ipAddr = req.headers["x-forwarded-for"];
+    if (ipAddr){
+        const list = ipAddr.split(",");
+        ipAddr = list[list.length-1];
+    } else {
+        ipAddr = req.connection.remoteAddress;
+    }
+    res.send(ipAddr);
 });
 
 app.get('*', (req, res) => {
