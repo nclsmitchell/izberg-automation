@@ -7,9 +7,8 @@ const ipfilter = require('express-ipfilter').IpFilter;
 
 const app = express();
 
-const AUTH_IP = ['127.0.0.1', '213.152.2.6'];
+const AUTH_IP = ['::ffff:127.0.0.1', '213.152.2.6/24'];
 
-app.use(ipfilter(AUTH_IP, {mode: 'allow'}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,6 +25,10 @@ app.listen(port, (error) => {
 });
 
 app.use('/static', express.static(path.join(__dirname, '../../build/static')));
+
+app.get('/test', function(req, res) {
+    res.send(req.connection.remoteAddress);
+});
 
 app.get('*', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../../build/index.html'));
