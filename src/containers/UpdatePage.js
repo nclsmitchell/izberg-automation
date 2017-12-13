@@ -14,6 +14,12 @@ class UpdatePage extends Component {
                     description: "Migrate all images of the channel items from `assigned_images` to `images`",
                     fields: [
                         {
+                           id: 0,
+                           param: "authorisation",
+                           type: "text",
+                           placeholder: "IZBERG token",
+                        },
+                        {
                             id: 1,
                             param: "id",
                             type: "text",

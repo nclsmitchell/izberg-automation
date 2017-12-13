@@ -14,6 +14,12 @@ class HomePage extends Component {
                     description: "A list of the Mapper errors for a specific transformation log ID",
                     fields: [
                         {
+                           id: 0,
+                           param: "authorization",
+                           type: "text",
+                           placeholder: "IZBERG token",
+                        },
+                        {
                             id: 1,
                             param: "id",
                             type: "text",
@@ -27,6 +33,12 @@ class HomePage extends Component {
                     label: "Channel item export",
                     description: "A list of the items contained in a specific channel",
                     fields: [
+                        {
+                           id: 0,
+                           param: "authorization",
+                           type: "text",
+                           placeholder: "IZBERG token",
+                        },
                         {
                             id: 1,
                             param: "id",
@@ -47,6 +59,12 @@ class HomePage extends Component {
                     label: "Merchant export",
                     description: "A list of all application merchants, including their merchant groups",
                     fields: [
+                        {
+                           id: 0,
+                           param: "authorization",
+                           type: "text",
+                           placeholder: "IZBERG token",
+                        },
                         {
                             id: 1,
                             param: "id",
