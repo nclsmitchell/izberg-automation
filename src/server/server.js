@@ -8,7 +8,7 @@ const app = express();
 
 const AUTH_IP = ['::ffff:127.0.0.1', '213.152.2.6'];
 
-function testIP() {
+function testIP(req) {
     let ipAddr = req.headers["x-forwarded-for"];
     if (ipAddr) {
         const list = ipAddr.split(",");
@@ -39,7 +39,7 @@ app.listen(port, (error) => {
 app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 
 app.get('*', (req, res) => {
-    if (testIP()) {
+    if (testIP(req)) {
         res.status(200).sendFile(path.join(__dirname, '../../build/index.html'));
     }
     else {
