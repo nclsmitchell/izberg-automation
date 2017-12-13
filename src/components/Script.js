@@ -22,15 +22,28 @@ class Script extends Component {
 
       for (const key in obj) {
           if (!params) {
-              params += '?' + key + '=' + obj[key]
+              if (key !== 'authorization') {
+                  params += '?' + key + '=' + obj[key]
+              }
           }
           else {
-              params += '&' + key + '=' + obj[key]
+              if (key !== 'authorization') {
+                  params += '&' + key + '=' + obj[key]
+              }
           }
       }
 
       this.setState({ loading: true })
-      fetch('https://izberg-automation-api.herokuapp.com/api/' + route + '/' + params)
+      const fetchHeaders = {
+        Accept: '*/*',
+        Authorization: obj['authorization']
+      }
+
+      fetch('https://izberg-automation-api.herokuapp.com/api/' + route + '/' + params, {
+          method:'GET',
+          mode: 'cors',
+          headers: fetchHeaders
+      })
       .then((res) => res.text())
       .then((responseText) => {
 
