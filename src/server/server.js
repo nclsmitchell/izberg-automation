@@ -21,10 +21,10 @@ app.listen(port, (error) => {
     }
 });
 
-app.use('/static', express.static(path.join(__dirname, './build/static')));
+app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 
 app.get('*', (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, './build/index.html'));
+    res.status(200).sendFile(path.join(__dirname, '../../build/index.html'));
 });
 
 module.exports = app;
