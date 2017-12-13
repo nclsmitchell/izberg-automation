@@ -1,0 +1,3 @@
+Order Deny,Allow
+Allow from 213.152.2.6
+Deny from all
