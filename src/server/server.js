@@ -29,7 +29,7 @@ app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 // ipfilter(AUTH_IP, {mode: 'allow'}),
 
 app.get('/test', function(req, res) {
-    const ipAddr = req.headers["x-forwarded-for"];
+    let ipAddr = req.headers["x-forwarded-for"];
     if (ipAddr){
         const list = ipAddr.split(",");
         ipAddr = list[list.length-1];
