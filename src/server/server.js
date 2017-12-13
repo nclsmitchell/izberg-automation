@@ -3,9 +3,13 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const ipfilter = require('express-ipfilter').IpFilter;
 
 const app = express();
 
+const AUTH_IP = ['127.0.0.1', '213.152.2.6'];
+
+app.use(ipfilter(AUTH_IP, {mode: 'allow'}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
