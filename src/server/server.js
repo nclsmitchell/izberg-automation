@@ -26,7 +26,9 @@ app.listen(port, (error) => {
 
 app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 
-app.get('/test', ipfilter(AUTH_IP, {mode: 'allow'}), function(req, res) {
+// ipfilter(AUTH_IP, {mode: 'allow'}),
+
+app.get('/test', function(req, res) {
     res.send(req.connection.remoteAddress);
 });
 
