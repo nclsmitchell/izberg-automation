@@ -12,7 +12,7 @@ function testIP() {
     let ipAddr = req.headers["x-forwarded-for"];
     if (ipAddr){
         const list = ipAddr.split(",");
-        if (list[list.length-1] = AUTH_IP[0] || list[list.length-1] = AUTH_IP[1]) {
+        if (list[list.length-1] == AUTH_IP[0] || list[list.length-1] == AUTH_IP[1]) {
             return true
         };
     else {
@@ -37,12 +37,13 @@ app.listen(port, (error) => {
 
 app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 
-
-if (testIP()) {
-    app.get('*', (req, res) => {
+app.get('*', (req, res) => {
+    if (testIP()) {
         res.status(200).sendFile(path.join(__dirname, '../../build/index.html'));
-    });
-}
-
+    }
+    else {
+        res.status(403).sendFile(path.join(__dirname, '../../build/403.html'));
+    }
+});
 
 module.exports = app;
