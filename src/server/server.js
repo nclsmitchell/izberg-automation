@@ -10,11 +10,12 @@ const AUTH_IP = ['::ffff:127.0.0.1', '213.152.2.6'];
 
 function testIP() {
     let ipAddr = req.headers["x-forwarded-for"];
-    if (ipAddr){
+    if (ipAddr) {
         const list = ipAddr.split(",");
         if (list[list.length-1] == AUTH_IP[0] || list[list.length-1] == AUTH_IP[1]) {
             return true
         };
+    }
     else {
         return false
     }
