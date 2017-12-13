@@ -3,11 +3,22 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const ipfilter = require('express-ipfilter').IpFilter;
 
 const app = express();
 
-const AUTH_IP = ['::ffff:127.0.0.1'];
+const AUTH_IP = ['::ffff:127.0.0.1', '213.152.2.6'];
+
+function testIP() {
+    let ipAddr = req.headers["x-forwarded-for"];
+    if (ipAddr){
+        const list = ipAddr.split(",");
+        if (list[list.length-1] = AUTH_IP[0] || list[list.length-1] = AUTH_IP[1]) {
+            return true
+        };
+    else {
+        return false
+    }
+}
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -26,21 +37,12 @@ app.listen(port, (error) => {
 
 app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 
-// ipfilter(AUTH_IP, {mode: 'allow'}),
 
-app.get('/test', function(req, res) {
-    let ipAddr = req.headers["x-forwarded-for"];
-    if (ipAddr){
-        const list = ipAddr.split(",");
-        ipAddr = list[list.length-1];
-    } else {
-        ipAddr = req.connection.remoteAddress;
-    }
-    res.send(ipAddr);
-});
+if (testIP()) {
+    app.get('*', (req, res) => {
+        res.status(200).sendFile(path.join(__dirname, '../../build/index.html'));
+    });
+}
 
-app.get('*', (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, '../../build/index.html'));
-});
 
 module.exports = app;
