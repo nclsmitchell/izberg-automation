@@ -37,7 +37,8 @@ app.listen(port, (error) => {
     }
 });
 
-app.use(cors({origin: '*'}), '/static', express.static(path.join(__dirname, '../../build/static')));
+app.use(cors({origin: '*'}));
+app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 
 const isAuth = (req, res, next) => {
     if (testIP(req)) {
