@@ -3,6 +3,7 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
@@ -36,7 +37,7 @@ app.listen(port, (error) => {
     }
 });
 
-app.use('/static', express.static(path.join(__dirname, '../../build/static')));
+app.use(cors({origin: '*'}), '/static', express.static(path.join(__dirname, '../../build/static')));
 
 const isAuth = (req, res, next) => {
     if (testIP(req)) {
