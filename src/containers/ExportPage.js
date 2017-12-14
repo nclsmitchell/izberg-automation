@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import ScriptPage from '../containers/ScriptPage'
 
-class HomePage extends Component {
+class ExportPage extends Component {
 
     constructor(props) {
         super(props)
@@ -113,4 +113,4 @@ class HomePage extends Component {
     }
 }
 
-export default HomePage
+export default ExportPage

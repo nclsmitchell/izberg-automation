@@ -38,13 +38,17 @@ app.listen(port, (error) => {
 
 app.use('/static', express.static(path.join(__dirname, '../../build/static')));
 
-app.get('*', (req, res) => {
+const isAuth = (req, res, next) => {
     if (testIP(req)) {
-        res.status(200).sendFile(path.join(__dirname, '../../build/index.html'));
+        next();
     }
     else {
-        res.status(403).sendFile(path.join(__dirname, '../../build/403.html'));
+        res.status(403).send('Unauthorized');
     }
+}
+
+app.get('*', isAuth, (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, '../../build/index.html'));
 });
 
 module.exports = app;

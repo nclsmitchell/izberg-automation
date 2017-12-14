@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './app.css'
 //import reducers from './reducers/reducers'
 import Header from './components/Header'
-import HomePage from './containers/HomePage'
+import ExportPage from './containers/ExportPage'
 import UpdatePage from './containers/UpdatePage'
 import ComparisonPage from './containers/ComparisonPage'
 
@@ -22,7 +22,7 @@ ReactDOM.render(
             <div>
                 <Header />
                 <Switch>
-                    <Route exact path="/" component={ HomePage } />
+                    <Route exact path="/" component={ ExportPage } />
                     <Route path="/update" component={ UpdatePage } />
                     <Route path="/compare" component={ ComparisonPage } />
                 </Switch>

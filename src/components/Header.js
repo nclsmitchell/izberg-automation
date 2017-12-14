@@ -7,7 +7,7 @@ class Header extends Component {
         return(
             <div>
                 <header className="header">
-                    <img src={ require('../img/logo-izberg-automation.png') } alt="IZEBERG scripts" />
+                    <img src={ require('../img/logo-izberg-backoffice-staff.png') } alt="IZBERG scripts" />
                 </header>
                 <nav>
                     <ul>

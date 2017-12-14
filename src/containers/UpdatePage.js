@@ -24,7 +24,13 @@ class UpdatePage extends Component {
                             param: "id",
                             type: "text",
                             placeholder: "Channel ID",
-                        }
+                        },
+                        {
+                            id: 2,
+                            param: "merchant_id",
+                            type: "text",
+                            placeholder: "Merchant ID (facultative)",
+                        },
                     ],
                     route: "image_migration",
                 },
