@@ -156,6 +156,8 @@ a {
 }
 
 .script-params .btn {
+  display: flex;
+  justify-content: center;
   line-height: 2px;
   width: 200px;
   height: 30px;
@@ -163,8 +165,12 @@ a {
   padding: 20px;
 }
 
+.script-params .loader {
+  margin-top: -5px;
+}
+
 .script-params .btn span {
-  line-height: 2px;
+  line-height: 12px;
 }
 
 .script-results {

@@ -41,7 +41,7 @@ class Script extends Component {
 
       fetch('https://izberg-automation-api.herokuapp.com/api/' + route + '/' + params, {
           method:'GET',
-          mode: 'cors',
+          mode: 'no-cors',
           headers: fetchHeaders
       })
       .then((res) => res.text())
