@@ -45,7 +45,7 @@ class ComparisonPage extends Component {
 
         this.setState({ loading: true })
         const fetchHeaders = {
-          Accept: '*/*',
+          Accept: '*/*'
         }
 
         fetch('https://izberg-automation-api.herokuapp.com/api/setting_comparison/' + params, {
