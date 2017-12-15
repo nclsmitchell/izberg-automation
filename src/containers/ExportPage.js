@@ -80,6 +80,12 @@ class ExportPage extends Component {
                     description: "A list of all application merchants and the state of their KYCs in Hipay",
                     fields: [
                         {
+                           id: 0,
+                           param: "authorization",
+                           type: "text",
+                           placeholder: "IZBERG token",
+                        },
+                        {
                             id: 1,
                             param: "id",
                             type: "text",
