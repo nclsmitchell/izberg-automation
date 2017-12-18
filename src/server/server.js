@@ -45,7 +45,7 @@ const isAuth = (req, res, next) => {
         next();
     }
     else {
-        res.status(403).send('Unauthorized');
+        res.status(403).send('Unauthorized IP: ' + req.connection.remoteAddress);
     }
 }
 
