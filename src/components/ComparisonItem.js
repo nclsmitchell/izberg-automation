@@ -1,33 +1,32 @@
-import React, { Component } from 'react'
+import React from 'react';
+import classNames from 'classnames';
+import '../css/comparisonItem.css';
 
-class ComparisonItem extends Component {
+const ComparisonItem = props => {
+	const { title, production, sandbox } = props;
 
-    render() {
-        const production = this.props.production
-        const sandbox = this.props.sandbox
+	const comparisonClass = classNames({
+		'comparison-item': true,
+		equal: !production && !sandbox,
+	});
 
-        if (production != null || sandbox != null) {
-            return (
-                <div className="comparison-item">
-                    <h2>{ this.props.title }</h2>
-                    <span className="identical">Identical</span>
-                    <div className="container">
-                        <span><strong>Production:</strong> { production }</span>
-                        <span>||</span>
-                        <span><strong>Sandbox:</strong> { sandbox }</span>
-                    </div>
-                </div>
-            )
-        }
-        else {
-            return (
-                <div className="comparison-item equal">
-                    <h2>{ this.props.title }</h2>
-                    <span className="identical">Identical</span>
-                </div>
-            )
-        }
-    }
-}
+	return (
+		<div className={comparisonClass}>
+			<h2>{title}</h2>
+			<span className="identical">Identical</span>
+			{!production && !sandbox ? null : (
+				<div className="container">
+					<span>
+						<strong>Production:</strong> {production}
+					</span>
+					<span>||</span>
+					<span>
+						<strong>Sandbox:</strong> {sandbox}
+					</span>
+				</div>
+			)}
+		</div>
+	);
+};
 
-export default ComparisonItem
+export default ComparisonItem;

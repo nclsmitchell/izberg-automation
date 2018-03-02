@@ -165,12 +165,12 @@ a {
   padding: 20px;
 }
 
-.script-params .loader {
+.script-params .btn .loader {
   margin-top: -5px;
 }
 
 .script-params .btn span {
-  line-height: 2px;
+  line-height: 4px;
 }
 
 .script-results {

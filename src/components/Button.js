@@ -1,23 +1,39 @@
-import React, { Component } from 'react'
-import ReactLoading from 'react-loading'
+import React from 'react';
+import classNames from 'classnames';
+import ReactLoading from 'react-loading';
+import '../css/button.css';
 
-class Button extends Component {
+const Button = props => {
+	const { label, active, loading, onClick } = props;
 
-    render() {
-        const label = this.props.label
-        const loading = this.props.loading
+	const btnClass = classNames({
+		btn: true,
+		main: true,
+		active: active,
+	});
 
-        if (loading) {
-          return (
-              <button className="btn main" onClick={this.props.onClick}><ReactLoading className="loader" type="spin" width="13" height="13" /><span>Loading</span></button>
-          )
-        }
-        else {
-            return (
-              <button className="btn main" onClick={this.props.onClick}>{label}</button>
-            )
-        }
-    }
-}
+	let innerLabel = label;
+	if (active) {
+		innerLabel = 'Re-' + label.toLowerCase();
+	}
 
-export default Button
+	return (
+		<button className={btnClass} onClick={onClick}>
+			{loading ? (
+				<div>
+					<ReactLoading
+						className="loader"
+						type="spin"
+						width="13"
+						height="13"
+					/>
+					<span>Loading</span>
+				</div>
+			) : (
+				innerLabel
+			)}
+		</button>
+	);
+};
+
+export default Button;
