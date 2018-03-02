@@ -1,0 +1,11 @@
+/* Input */
+
+.field-line {
+  margin: 20px 0;
+}
+
+.field-line input {
+  height: 30px;
+  width: calc(100% - 24px);
+  padding: 5px 10px;
+}

@@ -1,34 +1,43 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-// import { Provider } from 'react-redux'
-// import { createStore } from 'redux'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import reducers from './reducers';
+import thunk from 'redux-thunk';
 
-import './app.css'
-//import reducers from './reducers/reducers'
-import Header from './components/Header'
-import HomePage from './containers/HomePage'
-import UpdatePage from './containers/UpdatePage'
-import ComparisonPage from './containers/ComparisonPage'
+import Dashboard from './containers/Dashboard';
+import ExportPage from './containers/ExportPage';
+import UpdatePage from './containers/UpdatePage';
+import ComparisonPage from './containers/ComparisonPage';
+import Header from './components/Header';
+import './main.css';
 
-// let store = createStore(
-//     reducers,
-//     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-// )
+const middleware = [thunk];
+
+const store = createStore(reducers, applyMiddleware(...middleware));
 
 ReactDOM.render(
-    //<Provider store={store}>
-        <Router>
-            <div>
-                <Header />
-                <Switch>
-                    <Route exact path="/" component={ HomePage } />
-                    <Route path="/update" component={ UpdatePage } />
-                    <Route path="/compare" component={ ComparisonPage } />
-                </Switch>
-            </div>
-        </Router>
-    //</Provider>
-    ,
-    document.getElementById('root')
+  <Provider store={store}>
+    <Router>
+      <div className="automation">
+        <Header />
+        <div className="main-container">
+          <Switch>
+    				<Route exact path="/automation" component={Dashboard} />
+    				<Route path="/automation/export" component={ExportPage} />
+    				<Route path="/automation/update" component={UpdatePage} />
+    				<Route path="/automation/compare" component={ComparisonPage} />
+    				<Redirect
+    					to={{
+    						pathname: '/automation',
+    					}}
+    				/>
+    			</Switch>
+        </div>
+      </div>
+    </Router>
+  </Provider>
+  ,
+  document.getElementById('root')
 )

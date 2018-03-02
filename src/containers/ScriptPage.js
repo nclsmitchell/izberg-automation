@@ -1,25 +1,25 @@
-import React, { Component } from 'react'
-
-import Script from '../components/Script'
+import React, { Component } from 'react';
+import Script from '../components/Script';
 
 class ScriptPage extends Component {
+	renderScripts = () =>
+		this.props.scripts.map(script => {
+			const { description, fields, id, label, route } = script;
+			return (
+				<Script
+					key={id}
+					id={id}
+					label={label}
+					description={description}
+					fields={fields}
+					route={route}
+				/>
+			);
+		});
 
-    constructor(props) {
-        super(props)
-        this.renderScripts = this.renderScripts.bind(this)
-    }
-
-    renderScripts() {
-        return this.props.scripts.map( script => <Script key={ script.id } label={ script.label } description={ script.description } fields={ script.fields } route={ script.route } />)
-    }
-
-    render() {
-        return (
-            <div>
-                { this.renderScripts() }
-            </div>
-        )
-    }
+	render = () => (
+		<div className="script-container">{this.renderScripts()}</div>
+	);
 }
 
-export default ScriptPage
+export default ScriptPage;

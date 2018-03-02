@@ -1,0 +1,39 @@
+/* ComparisonItem */
+
+.comparison-item {
+  border: 1px solid #efefef;
+  margin: 20px;
+  padding: 40px;
+}
+
+.comparison-item h2 {
+  display: inline-block;
+  text-transform: capitalize;
+  color: #FF3719;
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+.comparison-item .identical {
+    display: inline-block;
+    float: right;
+    color: #afafaf;
+    text-decoration: line-through;
+    font-style: italic;
+}
+
+.comparison-item .container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+.comparison-item.equal h2 {
+    color: #B9F314;
+}
+
+.comparison-item.equal .identical {
+    text-decoration: none;
+}

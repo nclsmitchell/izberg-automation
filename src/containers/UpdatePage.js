@@ -1,44 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react';
 
-import ScriptPage from '../containers/ScriptPage'
+import ScriptPage from '../containers/ScriptPage';
+import { UPDATE_CONFIG } from '../_config';
 
-class UpdatePage extends Component {
+const UpdatePage = () => (
+	<div className="wrapper">
+		<ScriptPage scripts={UPDATE_CONFIG} />
+	</div>
+);
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            scripts: [
-                {
-                    id: 1,
-                    label: "Images migration",
-                    description: "Migrate all images of the channel items from `assigned_images` to `images`",
-                    fields: [
-                        {
-                           id: 0,
-                           param: "authorisation",
-                           type: "text",
-                           placeholder: "IZBERG token",
-                        },
-                        {
-                            id: 1,
-                            param: "id",
-                            type: "text",
-                            placeholder: "Channel ID",
-                        }
-                    ],
-                    route: "image_migration",
-                },
-            ]
-        }
-    }
-
-    render() {
-        return (
-            <div className="wrapper">
-                <ScriptPage scripts={ this.state.scripts } />
-            </div>
-        )
-    }
-}
-
-export default UpdatePage
+export default UpdatePage;

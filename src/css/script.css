@@ -1,0 +1,25 @@
+/* Script */
+
+.script-container {
+  padding-top: 40px;
+}
+
+.script-item {
+  display: inline-block;
+  vertical-align: top;
+  width: 298px;
+  border: 1px solid #efefef;
+  margin: 0 20px 40px;
+  padding: 0 20px 20px;
+  background-color: #fff;
+}
+
+.script-item h2 {
+  margin-bottom: 30px;
+}
+
+.script-item p {
+  color: #444;
+  font-size: 14px;
+  line-height: 21px;
+}

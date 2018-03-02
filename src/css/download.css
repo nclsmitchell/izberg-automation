@@ -1,0 +1,15 @@
+/* Download */
+
+.btn.download {
+    font-size: 20px;
+    padding: 6px 10px;
+    vertical-align: top;
+    margin-left: 10px;
+    background-color: #0080ff;
+    color: #fff;
+    opacity: 0.4;
+}
+
+.btn.download.active {
+    opacity: 1;
+}
