@@ -13,6 +13,7 @@ import ComparisonPage from './containers/ComparisonPage';
 import Header from './components/Header';
 import './main.css';
 
+
 const middleware = [thunk];
 
 const store = createStore(reducers, applyMiddleware(...middleware));

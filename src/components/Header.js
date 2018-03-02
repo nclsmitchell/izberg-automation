@@ -4,6 +4,9 @@ import '../css/header.css';
 
 const Header = () => (
 	<div>
+    <header className="header">
+     <img src={ require('../img/logo-izberg-backoffice-staff.png') } alt="IZBERG scripts" />
+    </header>
 		<nav>
 			<ul>
 				<li>

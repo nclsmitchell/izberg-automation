@@ -1,5 +1,18 @@
 /* Header */
 
+.header {
+  background-image: url('../img/banner-izberg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 40px 0;
+}
+
+.header img {
+  display: block;
+  width: 220px;
+  margin: 0 auto;
+}
+
 nav {
   background-color: #efefef;
   padding: 10px;
