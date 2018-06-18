@@ -14,7 +14,7 @@ class Script extends Component {
 		params: {},
 	};
 
-	exporter = (id, route) => {
+	export = (id, route) => {
 		const { exporter } = this.props;
 		const { params } = this.state;
 		exporter(id, route, params);
@@ -58,7 +58,7 @@ class Script extends Component {
 							label="Launch script"
 							active={active}
 							loading={loading}
-							onClick={() => this.exporter(id, route)}
+							onClick={() => this.export(id, route)}
 						/>
 						<Download active={active} href={file_href} />
 					</div>
@@ -76,7 +76,6 @@ const mapStateToProps = (state, ownProps) => {
 	};
 };
 
-const mapDispatchToProps = dispatch =>
-	bindActionCreators({ exporter }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ exporter }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Script);
